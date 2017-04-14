@@ -1,0 +1,23 @@
+{
+  "name": "web-development-with-node-and-express",
+  "version": "1.0.0",
+  "description": "",
+  "main": "meadowlark.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirrors89/web-development-with-node-and-express.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mirrors89/web-development-with-node-and-express/issues"
+  },
+  "homepage": "https://github.com/mirrors89/web-development-with-node-and-express#readme",
+  "dependencies": {
+    "express": "^4.15.2",
+    "handlebars": "^4.0.6"
+  }
+}
