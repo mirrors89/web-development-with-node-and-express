@@ -1,20 +1,13 @@
+var fortune = require('./lib/fortune')
 var express = require('express'),
   app = express(),
   handlebars = require('express-handlebars')
     .create({defaultLayout : 'main'});
 
-var fortunes = [
-  "Conquer your fears or they will conquer you.",
-  "Rivers need spring.",
-  "Do not fear what you don't know.",
-  "You will have a pleasant surprise.",
-  "Whenever possible, keep it simple."
-]
-
 app
   .use(express.static(__dirname + '/public'))
-  .set('port', process.env.PORT || 3000);
-  .engine('handlebars', handlebars.engine);
+  .set('port', process.env.PORT || 3000)
+  .engine('handlebars', handlebars.engine)
   .set('view engine', 'handlebars');
 
 app
@@ -22,8 +15,7 @@ app
     res.render('home');
   })
   .get('/about', function(req, res) {
-    var randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
-    res.render('about', { fortune:randomFortune });
+    res.render('about', { fortune : fortune.getFortune() });
   });
 
 // 커스텀 404 페이지
