@@ -18,6 +18,6 @@
   "homepage": "https://github.com/mirrors89/web-development-with-node-and-express#readme",
   "dependencies": {
     "express": "^4.15.2",
-    "handlebars": "^4.0.6"
+    "express-handlebars": "^3.0.0"
   }
 }
