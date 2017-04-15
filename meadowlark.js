@@ -1,4 +1,4 @@
-var fortune = require('./lib/fortune')
+var fortune = require('./lib/fortune');
 var express = require('express'),
   app = express(),
   handlebars = require('express-handlebars')
@@ -10,12 +10,20 @@ app
   .engine('handlebars', handlebars.engine)
   .set('view engine', 'handlebars');
 
+app.use(function(req, res, next) {
+  res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
+  next();
+});
+
 app
   .get('/', function(req, res) {
     res.render('home');
   })
   .get('/about', function(req, res) {
-    res.render('about', { fortune : fortune.getFortune() });
+    res.render('about', {
+      fortune : fortune.getFortune(),
+      pageTestScript: '/qa/tests-about.js'
+    });
   });
 
 // 커스텀 404 페이지
