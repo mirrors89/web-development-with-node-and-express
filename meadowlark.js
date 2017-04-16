@@ -26,6 +26,14 @@ app
     });
   });
 
+app
+  .get('/tours/hood-river', function(req, res) {
+    res.render('tours/hood-river');
+  })
+  .get('/tours/request-group-rate', function(req, res) {
+      res.render('tours/request-group-rate');
+  });
+
 // 커스텀 404 페이지
 app.
   use(function(req, res) {
