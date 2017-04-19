@@ -2,13 +2,29 @@ var fortune = require('./lib/fortune');
 var express = require('express'),
   app = express(),
   handlebars = require('express-handlebars')
-    .create({defaultLayout : 'main'});
+    .create({defaultLayout : 'main'}),
+  bodyParser = require('body-parser');
+
+var tours = [
+    { id : 0, name: 'Hood River', price: 99.99 },
+    { id : 1, name: 'Oregon Coast', price: 149.95 }
+];
 
 app
   .use(express.static(__dirname + '/public'))
   .set('port', process.env.PORT || 3000)
   .engine('handlebars', handlebars.engine)
   .set('view engine', 'handlebars');
+
+app
+  .use(bodyParser.json({
+	limit: '50mb'
+  }))
+  .use(bodyParser.urlencoded({
+	limit: '50mb',
+	extended: true
+  }));
+
 
 app.use(function(req, res, next) {
   res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
