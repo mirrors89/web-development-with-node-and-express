@@ -18,11 +18,21 @@
   "homepage": "https://github.com/mirrors89/web-development-with-node-and-express#readme",
   "dependencies": {
     "express": "^4.15.2",
-    "express-handlebars": "^3.0.0"
+    "express-handlebars": "^3.0.0",
+    "jquery": "^3.2.1",
+    "require-all": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-exec": "^2.1.3",
+    "gulp-jshint": "^2.0.4",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-mocha": "^4.3.0",
+    "gulp-mocha-phantomjs": "^0.12.1",
+    "jshint": "^2.9.4",
     "mocha": "^3.2.0",
+    "mocha-jsdom": "^1.1.0",
     "zombie": "^5.0.5"
   }
 }

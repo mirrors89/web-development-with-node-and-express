@@ -44,10 +44,10 @@ app.
     console.error(err.stack);
     res.status(500);
     res.render('500');
-  })
+  });
 
-// Application listen
+// Application listens
 app.listen(app.get('port'), function() {
-  console.log('Express started on  http://localhost:' + app.get('port')
-                  +'; press Ctrl-c to terminate.');
+  console.log('Express started on  http://localhost:' + app.get('port') +
+                  '; press Ctrl-c to terminate.');
 });
