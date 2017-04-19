@@ -17,7 +17,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('exec', function() {
-	exec('linkcheck http://localhost:3000', function(err, stdout, stderr) {
+	exec('blc http://localhost:3000/about -ro', function(err, stdout, stderr) {
 		console.log(stdout);
 		console.log(stderr);
 	})

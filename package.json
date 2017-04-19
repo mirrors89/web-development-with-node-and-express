@@ -24,6 +24,7 @@
     "require-all": "^2.2.0"
   },
   "devDependencies": {
+    "broken-link-checker": "^0.7.4",
     "chai": "^3.5.0",
     "gulp": "^3.9.1",
     "gulp-exec": "^2.1.3",
