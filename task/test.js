@@ -17,7 +17,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('exec', function() {
-	exec('blc http://localhost:3000/about -ro', function(err, stdout, stderr) {
+	exec('blc http://localhost:3000/ -ro', function(err, stdout, stderr) {
 		console.log(stdout);
 		console.log(stderr);
 	})

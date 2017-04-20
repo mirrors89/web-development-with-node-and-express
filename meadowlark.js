@@ -2,7 +2,16 @@ var fortune = require('./lib/fortune');
 var express = require('express'),
   app = express(),
   handlebars = require('express-handlebars')
-    .create({defaultLayout : 'main'}),
+    .create({
+      defaultLayout : 'main',
+      helpers: {
+        section: function (name, option) {
+          if(!this._sections) this._sections = {};
+          this._sections[name] = option.fn(this);
+          return null;
+        }
+      }
+    }),
   bodyParser = require('body-parser');
 
 var tours = [
@@ -31,6 +40,13 @@ app.use(function(req, res, next) {
   next();
 });
 
+
+app.use(function(req, res, next) {
+  if(!res.locals.partials) res.locals.partials = {};
+    res.locals.partials.weatherContext = getWeatherData();
+    next();
+});
+
 app
   .get('/', function(req, res) {
     res.render('home');
@@ -42,6 +58,12 @@ app
     });
   });
 
+
+app
+	.get('/test', function(req, res) {
+		res.render('jquery-test');
+	});
+
 app
   .get('/tours/hood-river', function(req, res) {
     res.render('tours/hood-river');
@@ -49,6 +71,42 @@ app
   .get('/tours/request-group-rate', function(req, res) {
       res.render('tours/request-group-rate');
   });
+
+app.get('/headers', function(req, res) {
+  res.set('Content-Type', 'text/plain');
+  var s = '';
+  for(var name in req.headers) s += name + ' : ' + req.headers[name] + '\n';
+  res.send(s);
+});
+
+app.get('/api/tours', function(req, res) {
+  var toursXml = '' +
+      tours.map(function(p) {
+        return '" id ="' + p.id + '">' + p.name + '';
+      }).join('') + '';
+  var toursText = tours.map(function(p) {
+        return p.id + ': ' + p.name + ' (' + p.price + ')';
+      }).join('\n');
+
+  res.format({
+    'application/json': function() {
+      res.json(tours);
+    },
+    'application/xml': function() {
+      res.type('application/xml');
+      res.send(toursXml);
+    },
+    'text/xml': function() {
+      res.type('text/xml');
+      res.send(toursXml);
+    },
+	'text/plain': function() {
+      res.type('text/plain');
+      res.send(toursXml);
+    }
+  });
+});
+
 
 // 커스텀 404 페이지
 app.
@@ -67,3 +125,31 @@ app.listen(app.get('port'), function() {
   console.log('Express started on  http://localhost:' + app.get('port') +
                   '; press Ctrl-c to terminate.');
 });
+
+function getWeatherData() {
+  return {
+    location: [
+      {
+        name: 'Portland',
+        forecastUrl: 'http://www.wunderground.com/US/OR/Portland.html',
+        iconUrl: 'http://icon-ak.xwug.com/i/c/k/cloudy.gif',
+        weather: 'Overcast',
+        temp: '54.1 F (12.3 C)'
+      },
+      {
+        name: 'Bend',
+        forecastUrl: 'http://www.wunderground.com/US/OR/Bend.html',
+        iconUrl: 'http://icon-ak.xwug.com/i/c/k/partlycloudy.gif',
+        weather: 'Partly Cloudy',
+        temp: '55.0 F (12.8 C)'
+      },
+      {
+        name: 'Manzanita',
+        forecastUrl: 'http://www.wunderground.com/US/OR/Manzanita.html',
+        iconUrl: 'http://icon-ak.xwug.com/i/c/k/rain.gif',
+        weather: 'Light Rain',
+        temp: '55.0 F (12.8 C)'
+      }
+    ]
+  };
+}
