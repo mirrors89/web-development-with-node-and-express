@@ -1,17 +1,16 @@
-var jsdom = require('jsdom');
 var jquery = require('jquery');
-var assert = require('chai').assert;
-var $;
-
-jsdom.env({
-	url: 'http://localhost:3000/about',
-	done: function(err, window) {
-		$ = jquery(window);
-	}
-});
+var Browser = require('zombie');
+var browser;
 
 suite('"About" Page Tests', function () {
-  test('page should contain link to contact page', function () {
-    assert($('a[href="/contact"]').length);
+	setup(function(){
+		browser = new Browser();
+	});
+
+	test('page should contain link to contact page', function () {
+		browser.visit('http://localhost:3000/about', function() {
+			browser.assert.element('a[href="/contact"]');
+		});
+	  // assert($('a[href="/contact"]').length);
   });
 });
