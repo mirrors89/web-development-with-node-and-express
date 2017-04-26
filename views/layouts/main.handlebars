@@ -6,18 +6,38 @@
   {{#if showTests}}
     <link rel="stylesheet" href="/vendor/mocha.css">
   {{/if}}
-    <script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+            padding-bottom: 20px;
+        }
+    </style>
+    <link rel="stylesheet" href="/vendor/bootstrap/css/bootstrap-theme.min.css">
+
+    <script src="/vendor/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
 <body>
   <header>
     <img src="/img/logo.png" alt="Meadowlark Travel Logo">
   </header>
-  {{{body}}}
+  <div class="container">
+      {{#if flash}}
+          <div class="alert alert-dismissible alert-{{flash.type}}">
+              <button type="button" class="close"
+                      data-dismiss="alert" aria-hidden="true">&times;</button>
+              <strong>{{flash.intro}}</strong> {{{flash.message}}}
+          </div>
+      {{/if}}
 
+      {{{body}}}
+  </div>
 
-  {{{_sections.jquery}}}
   <footer>&copy; {{copyrightYear}} Meadowlark Travel</footer>
 
+  <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script>window.jQuery || document.write('<script src="/vendor/js/jquery-2.1.1.min.js"><\/script>')</script>
+  {{{_sections.jquery}}}
 
   {{#if showTests}}
     <div id="mocha"></div>
@@ -33,5 +53,7 @@
     {{/if}}
     <script>mocha.run();</script>
   {{/if}}
+  <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+
 </body>
 </html>
