@@ -20,6 +20,7 @@
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
+    "formidable": "^1.1.1",
     "jquery": "^3.2.1",
     "require-all": "^2.2.0"
   },
