@@ -13,7 +13,8 @@ var express = require('express'),
       }
     }),
   bodyParser = require('body-parser'),
-  formidable = require('formidable');
+  formidable = require('formidable'),
+  jqupload = require('jquery-file-upload-middleware');
 
 var tours = [
     { id : 0, name: 'Hood River', price: 99.99 },
@@ -47,6 +48,19 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.use('/upload', function(req, res, next) {
+    var now = Date.now();
+    jqupload.fileHandler({
+        uploadDir: function() {
+            return __dirname + '/public/uploads/' + now;
+        },
+
+        uploadUrl: function() {
+            return '/uploads/' + now;
+        }
+    })(req, res, next);
+});
+
 app
   .get('/', function(req, res) {
     res.render('home');
@@ -58,11 +72,6 @@ app
     });
   });
 
-
-app
-	.get('/test', function(req, res) {
-		res.render('jquery-test');
-	});
 
 app
   .get('/tours/hood-river', function(req, res) {
@@ -85,6 +94,9 @@ app.get('/data/nursery-rhyme', function(req, res) {
   });
 });
 
+app.get('/thank-you', function(req, res){
+    res.render('thank-you');
+});
 
 app.get('/newsletter', function(req, res) {
   res.render('newsletter', {csrf: 'CSRF token goes here'});
@@ -123,44 +135,6 @@ app.post('/contest/vacation-photo/:year/:month', function(req, res) {
     res.redirect(303, '/thank-you')
   });
 });
-
-
-
-app.get('/headers', function(req, res) {
-  res.set('Content-Type', 'text/plain');
-  var s = '';
-  for(var name in req.headers) s += name + ' : ' + req.headers[name] + '\n';
-  res.send(s);
-});
-
-app.get('/api/tours', function(req, res) {
-  var toursXml = '' +
-      tours.map(function(p) {
-        return '" id ="' + p.id + '">' + p.name + '';
-      }).join('') + '';
-  var toursText = tours.map(function(p) {
-        return p.id + ': ' + p.name + ' (' + p.price + ')';
-      }).join('\n');
-
-  res.format({
-    'application/json': function() {
-      res.json(tours);
-    },
-    'application/xml': function() {
-      res.type('application/xml');
-      res.send(toursXml);
-    },
-    'text/xml': function() {
-      res.type('text/xml');
-      res.send(toursXml);
-    },
-	'text/plain': function() {
-      res.type('text/plain');
-      res.send(toursXml);
-    }
-  });
-});
-
 
 // 커스텀 404 페이지
 app.
