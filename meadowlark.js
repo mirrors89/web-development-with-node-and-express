@@ -41,6 +41,16 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+switch(app.get('env')){
+    case 'development':
+        app.use(require('morgan')('dev'));
+        break;
+    case 'production':
+        app.use(require('express-logger'))({
+            path: __dirname + '/log/request.log'
+        });
+        break;
+}
 
 // flash message middleware
 app.use(function(req, res, next){
@@ -337,6 +347,6 @@ app.use(function(err, req, res, next){
 });
 
 app.listen(app.get('port'), function(){
-    console.log( 'Express started on http://localhost:' +
-        app.get('port') + '; press Ctrl-C to terminate.' );
+    console.log( 'Express started in ' + app.get('env') +
+        ' mode on http://localhost:' + app.get('port') + '; press Ctrl-C to terminate.' );
 });
