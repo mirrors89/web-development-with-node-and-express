@@ -52,6 +52,47 @@ switch(app.get('env')){
         break;
 }
 
+app.use(function(req, res, next) {
+    var cluster = require('cluster');
+    if(cluster.isWorker) console.log('Worker %d receicved request', cluster.worker.id);
+    next();
+});
+
+app.use(function(req, res, next) {
+    var domain = require('domain').create();
+    domain.on('error', function(err) {
+       console.log('DOMAIN ERROR CAUGHT\n', err.stack);
+       try {
+           setTimeout(function() {
+              console.error('Failsafe shoutdown.');
+              process.exit(1);
+           }, 5000);
+
+           var worker = require('cluster').worker;
+           if(worker) worker.disconnect();
+
+           server.close();
+           try {
+               next(err);
+           } catch(err) {
+               console.error('Express error mechanism failed.\n', err.stack);
+               res.statusCode = 500;
+               res.setHeader('content-type', 'text/plain');
+               res.end('Server error.');
+           }
+       } catch(err) {
+           console.error('Unable to send 500 response.\n', err.stack);
+       }
+    });
+
+    domain.add(req);
+    domain.add(res);
+
+    domain.run(next);
+});
+
+
+
 // flash message middleware
 app.use(function(req, res, next){
     // if there's a flash message, transfer
